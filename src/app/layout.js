@@ -3,7 +3,7 @@ import "./globals.css";
 
 const notoSansJP = Noto_Sans_JP({
   variable: "--font-noto-sans-jp",
-  subsets: ["latin"],
+  subsets: ["japanese"],
 });
 
 // const geistMono = Geist_Mono({

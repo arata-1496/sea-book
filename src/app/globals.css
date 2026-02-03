@@ -3,21 +3,29 @@
 :root {
   --background: #0046FF;
   --foreground: #171717;
+  --font-sans:'Noto Sans JP';
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-noto-sans-jp);
+
+  /* color設定 */
+  --color-blue: #0046FF;
+  --color-skyblue: #73C8D2;
+  --color-yellow: #F5F1DC;
+  --color-orange: #FF9013;
+  --color-black: #010101;
+
   /* --font-mono: var(--font-geist-mono); */
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0046FF;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   background: var(--background);
