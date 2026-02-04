@@ -1,8 +1,14 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <div >
       <h1>Hello World!</h1>
       <h1 className="font-black text-[40px] text-yellow outline-solid outline-1">こんにちは</h1>
+      <button>
+        <Link href="/quiz-start">クイズ開始</Link>
+      </button>
+
     </div>
   );
 }

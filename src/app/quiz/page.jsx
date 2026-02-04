@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { AnimalData } from "@/data/animalData";
+import { SetValue } from "@/components/SetValue";
 
 const QuizPage = async ({ searchParams }) => {
+  // クエリから生物を確定させる
   const getNumber = await searchParams;
-  console.log(getNumber.id);
-  const getAnimal = AnimalData.find(({ id }) => id === getNumber.id);
-  console.log(getAnimal);
+  // console.log(getNumber.id);
+  const getAnimal = AnimalData.find(({ id }) => id === Number(getNumber.id));
+  // console.log(getAnimal.name);
 
   return (
     <div>
@@ -18,6 +20,7 @@ const QuizPage = async ({ searchParams }) => {
           />
         </div>
       </div>
+      <SetValue />
       <div className="mt-8 ml-3">
         <div>
           <button className="border-4 rounded-2xl bg-yellow text-3xl p-1 font-bold">
@@ -28,7 +31,6 @@ const QuizPage = async ({ searchParams }) => {
     </div>
   );
 };
-
 export default QuizPage;
 
 // export default function QuizPage() {
