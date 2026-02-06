@@ -24,13 +24,13 @@ export const SetValue = () => {
     setOutput("");
   };
 
-  const handleResult = () => {
+  const handleClickResult = () => {
     const getAnimal = AnimalData.find(({ id }) => id === Number(queryId));
     let resultQuery = "";
     if (getAnimal.name === output) {
-      resultQuery = `/quiz/?id=${queryId}/true`;
+      resultQuery = `/quiz/result?id=${queryId}&correct=true`;
     } else {
-      resultQuery = `/quiz/?id=${queryId}/false`;
+      resultQuery = `/quiz/result?id=${queryId}&correct=false`;
     }
     router.push(resultQuery);
   };
@@ -58,7 +58,7 @@ export const SetValue = () => {
               やりなおす
             </button>
             <button
-              onClick={handleResult}
+              onClick={handleClickResult}
               className="border-4 rounded-2xl bg-orange text-center h-10 w-28 mx-1"
             >
               <Link href={""}>けってい</Link>
