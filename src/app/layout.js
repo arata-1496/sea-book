@@ -22,7 +22,11 @@ export default function RootLayout({ children }) {
       <body
         className={`${notoSansJP.variable}  `}
       >
-        {children}
+        <div className="w-full   ">
+          <div className="w-full  lg:w-3xl m-auto lg:border-8 lg:border-black lg:rounded-3xl">
+            {children}
+          </div>
+        </div>
       </body>
     </html>
   );

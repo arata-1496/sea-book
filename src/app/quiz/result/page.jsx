@@ -2,6 +2,9 @@
 import Link from "next/link";
 import { AnimalData } from "@/data/animalData";
 import { useSearchParams } from "next/navigation";
+import Image from "next/image";
+import { Frown } from "lucide-react";
+import { Footer } from "@/components/Fotter";
 
 const ResultPage = () => {
   const seachParams = useSearchParams();
@@ -21,15 +24,23 @@ const ResultPage = () => {
           />
         </div>
       </div>
+      <div className="w-hull text-center ">
+        <h1 className="text-3xl font-black text-white">{getAnimal.name}</h1>
+      </div>
 
-      <div>{queryCorrect === "true" ? <h1>True</h1> : <h1>False</h1>}</div>
-      <div className="mt-8 ml-3">
-        <div>
-          <button className="border-4 rounded-2xl bg-yellow text-3xl p-1 font-bold">
-            <Link href="/quiz-start">やめる</Link>
-          </button>
+      <div className="w-full">
+        <div className="text-center mt-5 font-black text-5xl ">
+          {queryCorrect === "true" ? (
+            <h1 className=" animate-bounce text-orange">せいかい！</h1>
+          ) : (
+            <>
+              <h1>ざんねん</h1>
+              <Frown />
+            </>
+          )}
         </div>
       </div>
+      <Footer page="result" />
     </div>
   );
 };

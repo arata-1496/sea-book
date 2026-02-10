@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { AnimalData } from "@/data/animalData";
 
 export default function QuizStartPage() {
   //useRouterを定義
@@ -8,7 +9,7 @@ export default function QuizStartPage() {
 
   //ランダム数字をurlのクエリに入れる関数
   const handleDecideAnimal = () => {
-    const randamNum = Math.floor(Math.random() * 10) + 1; //id分 (*▫️)を変更する
+    const randamNum = Math.floor(Math.random() * AnimalData.length) + 1; //id分 (*▫️)を変更する
     const query = `/quiz/?id=${randamNum}`;
     router.push(query);
   };

@@ -38,9 +38,9 @@ export const SetValue = () => {
   return (
     <div>
       <div className="flex w-auto justify-center m-2">
-        <div className="border-4 rounded-2xl bg-yellow text-center h-10 w-28">
+        <div className="border-4 border-black rounded-2xl bg-yellow text-center h-10 w-28">
           {output ? (
-            <div className="text-xl text-black font-black">
+            <div className="text-xl text-black font-black ">
               {output && <h1>{output}</h1>}
             </div>
           ) : (
@@ -52,14 +52,14 @@ export const SetValue = () => {
         {output ? (
           <div>
             <button
-              className="border-4 rounded-2xl bg-skyblue text-center h-10 w-28 mx-1"
+              className="border-4 border-black rounded-2xl bg-skyblue text-center h-10 w-28 mx-1"
               onClick={handleCansellClick}
             >
               やりなおす
             </button>
             <button
               onClick={handleClickResult}
-              className="border-4 rounded-2xl bg-orange text-center h-10 w-28 mx-1"
+              className="border-4 border-black rounded-2xl bg-orange text-center h-10 w-28 mx-1"
             >
               <Link href={""}>けってい</Link>
             </button>
@@ -68,13 +68,13 @@ export const SetValue = () => {
           <div>
             <input
               type="text"
-              className="border border-gray-300 rounded p-2 w-48 mb-4 text-black"
+              className="border-2 border-black bg-orange mr-2 rounded p-2 w-48 mb-4 text-black"
               placeholder="(ひらがな)"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
             />
             <button
-              className="bg-yellow rounded-3xl w-28 px-2.5 border-8 p-1.5 hover:bg-blue-700 font-black"
+              className="bg-orange rounded-3xl w-28 px-2.5 border-4 border-black p-1.5 hover:bg-yellow font-black"
               onClick={handleClick}
             >
               きめた
