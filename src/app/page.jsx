@@ -2,13 +2,14 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div >
+    <div>
       <h1>Hello World!</h1>
-      <h1 className="font-black text-[40px] text-yellow outline-solid outline-1">こんにちは</h1>
+      <h1 className="font-black text-[40px] text-yellow outline-solid outline-1">
+        こんにちは
+      </h1>
       <button>
-        <Link href="/quiz-start">クイズ開始</Link>
+        <Link href="/start">クイズ開始</Link>
       </button>
-
     </div>
   );
 }
@@ -30,4 +31,3 @@ export default function Home() {
 // color: #F5F1DC;
 
 // border: 1px solid #010101;
-

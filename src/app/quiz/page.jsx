@@ -1,15 +1,19 @@
-// "use client";
-import Link from "next/link";
-import { AnimalData } from "@/data/animalData";
+"use client";
+
 import { SetValue } from "@/components/SetValue";
 import { Footer } from "@/components/Fotter";
+import useAnimal from "@/hooks/useAnimal";
+import { useSearchParams } from "next/navigation";
 
-const QuizPage = async ({ searchParams }) => {
+const QuizPage = () => {
   // クエリから生物を確定させる
-  const getNumber = await searchParams;
-  // console.log(getNumber.id);
-  const getAnimal = AnimalData.find(({ id }) => id === Number(getNumber.id));
-  // console.log(getAnimal.name);
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  const { animal, loading, error } = useAnimal(id);
+
+  if (loading) {
+    return <div>読み込み中...</div>;
+  }
 
   return (
     <div>
@@ -17,12 +21,12 @@ const QuizPage = async ({ searchParams }) => {
         <div className="bg-yellow rounded-3xl size-52 mx-auto my-0 px-2.5 border-8 border-black flex p-1.5">
           <img
             className="object-contain object-center"
-            src={getAnimal.src}
-            alt={getAnimal.name}
+            src={animal.image}
+            alt={animal.name}
           />
         </div>
       </div>
-      <SetValue />
+      <SetValue animal={animal} id={id} />
       <Footer />
     </div>
   );

@@ -2,19 +2,25 @@
 import { ArrowBigLeftDash, CircleArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { AnimalData } from "@/data/animalData";
+import useAnimals from "@/hooks/useAnimals";
 
 export const Footer = ({ page }) => {
   //useRouterを定義
   const router = useRouter();
 
+  const { animals, loading, error } = useAnimals();
+
   //ランダム数字をurlのクエリに入れる関数
   const handleDecideAnimal = () => {
-    const randomNum = Math.floor(Math.random() * AnimalData.length) + 1; //id分 (*▫️)を変更する
-    const query = `/quiz/?id=${randomNum}`;
+    const randomNum = Math.floor(Math.random() * animals.length); //id分 (*▫️)を変更する
+    const animalNum = animals[randomNum].animal_id;
+    const query = `/quiz/?id=${animalNum}`;
     router.push(query);
   };
 
+  if (loading) {
+    return <div>読み込み中...</div>;
+  }
   return (
     <>
       {page === "result" ? (
@@ -24,7 +30,7 @@ export const Footer = ({ page }) => {
               <div className="flex justify-between mt-3">
                 {/* ボタン */}
                 <button className="border-4 border-black rounded-2xl bg-yellow text-3xl p-1 font-bold">
-                  <Link href="/quiz-start" className="flex items-center">
+                  <Link href="/start" className="flex items-center">
                     <ArrowBigLeftDash className="w-8 h-auto" />
                     <h1>やめる</h1>
                   </Link>
@@ -49,7 +55,7 @@ export const Footer = ({ page }) => {
           <div className="w-full flex">
             <div className="w-full lg:w-3xl m-auto">
               <button className="border-4 border-black rounded-2xl bg-yellow text-3xl p-1 font-bold">
-                <Link href="/quiz-start" className="flex items-center">
+                <Link href="/start" className="flex items-center">
                   <ArrowBigLeftDash className="w-8 h-auto" />
                   <h1>やめる</h1>
                 </Link>

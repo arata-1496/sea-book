@@ -1,17 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { AnimalData } from "@/data/animalData";
 import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
+import useUserStore from "@/store/userStore";
 import Link from "next/link";
 
-export const SetValue = () => {
+export const SetValue = ({ animal, id }) => {
   const [inputValue, setInputValue] = useState("");
   const [output, setOutput] = useState("");
-
-  const seachParams = useSearchParams();
-  const queryId = seachParams.get("id");
+  const userId = useUserStore((state) => state.userId);
   const router = useRouter();
 
   // 入力欄の作成
@@ -20,18 +18,27 @@ export const SetValue = () => {
     setOutput(inputValue);
     setInputValue("");
   };
-  const handleCansellClick = () => {
+  const handleCancelClick = () => {
     setOutput("");
   };
 
-  const handleClickResult = () => {
-    const getAnimal = AnimalData.find(({ id }) => id === Number(queryId));
-    let resultQuery = "";
-    if (getAnimal.name === output) {
-      resultQuery = `/quiz/result?id=${queryId}&correct=true`;
-    } else {
-      resultQuery = `/quiz/result?id=${queryId}&correct=false`;
+  const handleClickResult = async () => {
+    const isCorrect = animal.name === output;
+
+    const { error } = await supabase.from("animal_answers").insert({
+      user_id: userId,
+      animal_id: id,
+      result: isCorrect,
+    });
+
+    if (error) {
+      console.error("保存エラー:", error);
+      // エラーが出ても、結果ページには遷移する
     }
+
+    const resultQuery = isCorrect
+      ? `/quiz/result?id=${id}&correct=true`
+      : `/quiz/result?id=${id}&correct=false`;
     router.push(resultQuery);
   };
 
@@ -53,7 +60,7 @@ export const SetValue = () => {
           <div>
             <button
               className="border-4 border-black rounded-2xl bg-skyblue text-center h-10 w-28 mx-1"
-              onClick={handleCansellClick}
+              onClick={handleCancelClick}
             >
               やりなおす
             </button>
