@@ -1,25 +1,24 @@
 "use client";
 
-import useAnimal from "@/hooks/useAnimal";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function TestPage() {
-  const { animal, loading, error } = useAnimal(1);
-
-  if (loading) {
-    return <div>読み込み中...</div>;
-  }
-
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Supabase接続テスト</h1>
-      <h2>生き物一覧</h2>
+    <div className="h-screen flex flex-col items-center justify-center gap-4">
+      <Toaster position="top-center" />
 
-      <div className="flex gap-2">
-        <div key={animal.animal_id}>
-          <img className="w-auto h-60" src={animal.image} alt={animal.name} />
-          <h2 className="text-center">{animal.name}</h2>
-        </div>
-      </div>
+      <Button
+        variant="outline"
+        onClick={() =>
+          toast.warning("このばんごうはつかわれているよ、、、", {
+            duration: 1500,
+          })
+        }
+      >
+        試してみる
+      </Button>
     </div>
   );
 }

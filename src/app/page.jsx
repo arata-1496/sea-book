@@ -8,7 +8,7 @@ export default function Home() {
         こんにちは
       </h1>
       <button>
-        <Link href="/start">クイズ開始</Link>
+        <Link href="/user">はじめる（ユーザーとうろく）</Link>
       </button>
     </div>
   );
