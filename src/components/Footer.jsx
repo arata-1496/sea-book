@@ -2,13 +2,13 @@
 import { ArrowBigLeftDash, CircleArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import useAnimals from "@/hooks/useAnimals";
+import useAnimalId from "@/hooks/useAnimalId";
 
-export const Footer = ({ page }) => {
+export const Footer = ({ page, back }) => {
   //useRouterを定義
   const router = useRouter();
 
-  const { animals, loading, error } = useAnimals();
+  const { animals, loading, error } = useAnimalId();
 
   //ランダム数字をurlのクエリに入れる関数
   const handleDecideAnimal = () => {
@@ -25,7 +25,7 @@ export const Footer = ({ page }) => {
     <>
       {page === "result" ? (
         <div>
-          <div className="w-full ">
+          <div className="w-full pb-2 pl-2">
             <div className="w-full lg:w-3xl p-5">
               <div className="flex justify-between mt-3">
                 {/* ボタン */}
@@ -52,10 +52,10 @@ export const Footer = ({ page }) => {
         </div>
       ) : (
         <div>
-          <div className="w-full flex">
+          <div className="w-full flex pb-2 pl-2 ">
             <div className="w-full lg:w-3xl m-auto">
               <button className="border-4 border-black rounded-2xl bg-yellow text-3xl p-1 font-bold">
-                <Link href="/start" className="flex items-center">
+                <Link href={`/${back}`} className="flex items-center">
                   <ArrowBigLeftDash className="w-8 h-auto" />
                   <h1>やめる</h1>
                 </Link>

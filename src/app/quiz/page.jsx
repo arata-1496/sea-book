@@ -1,7 +1,7 @@
 "use client";
 
 import { SetValue } from "@/components/SetValue";
-import { Footer } from "@/components/Fotter";
+import { Footer } from "@/components/Footer";
 import useAnimal from "@/hooks/useAnimal";
 import { useSearchParams } from "next/navigation";
 
@@ -27,7 +27,7 @@ const QuizPage = () => {
         </div>
       </div>
       <SetValue animal={animal} id={id} />
-      <Footer />
+      <Footer back="start" />
     </div>
   );
 };

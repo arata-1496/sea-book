@@ -1,11 +1,13 @@
 "use client";
 import { useRouter } from "next/navigation";
-import useAnimals from "@/hooks/useAnimals";
-import { Footer } from "@/components/Fotter";
+import useAnimalId from "@/hooks/useAnimalId";
+import { Footer } from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function StartPage() {
   const router = useRouter();
-  const { animals, loading, error } = useAnimals();
+  const { animals, loading, error } = useAnimalId();
   // const setGuestUser = useUserStore((state) => state.setGuestUser); // ← 追加
 
   const handleDecideAnimal = () => {
@@ -26,15 +28,26 @@ export default function StartPage() {
   localStorage.setItem("user-storage", JSON.stringify(data));
 
   return (
-    <div className="h-screen flex">
-      <div className="my-auto mx-auto ">
-        <button
+    <div className="flex flex-col h-full pt-20">
+      <h1 className="text-4xl font-black text-black text-center  ">
+        モードをえらんで
+      </h1>
+
+      <div className="my-auto mx-auto">
+        <Button
           onClick={handleDecideAnimal}
-          className="border-4 rounded-2xl bg-yellow text-3xl p-1"
+          className="border-2 rounded-2xl border-black bg-orange text-4xl font-black text-black px-5 py-12"
         >
-          クイズをはじめる
-        </button>
+          クイズ
+        </Button>
+        <Button
+          asChild
+          className="border-2 rounded-2xl border-black bg-yellow text-4xl font-black text-black px-5 py-12"
+        >
+          <Link href="/book">ずかん</Link>
+        </Button>
       </div>
+      <Footer back="user" />
     </div>
   );
 }

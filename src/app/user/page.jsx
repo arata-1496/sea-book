@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import { Footer } from "@/components/Footer";
 
 export default function UserPage() {
   //router
@@ -109,11 +110,11 @@ export default function UserPage() {
     router.push("/start");
   }; //ーーーーーーーーーーーーーーーーーーーー
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <div>
         <Toaster position="top-center" />
       </div>
-      <div>
+      <div className="flex-1">
         {showRegistererForm ? (
           <div className="">
             <div className="">
@@ -191,6 +192,7 @@ export default function UserPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      <Footer back="" />
     </div>
   );
 }

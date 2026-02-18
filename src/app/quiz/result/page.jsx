@@ -3,7 +3,7 @@
 import useAnimal from "@/hooks/useAnimal";
 import { useSearchParams } from "next/navigation";
 import { Frown } from "lucide-react";
-import { Footer } from "@/components/Fotter";
+import { Footer } from "@/components/Footer";
 
 const ResultPage = () => {
   const searchParams = useSearchParams();
