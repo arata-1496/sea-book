@@ -1,11 +1,12 @@
 "use client";
 
+import { Suspense } from "react";
 import useAnimal from "@/hooks/useAnimal";
 import { useSearchParams } from "next/navigation";
 import { Frown } from "lucide-react";
 import { Footer } from "@/components/Footer";
 
-const ResultPage = () => {
+const ResultContent = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const queryCorrect = searchParams.get("correct");
@@ -47,4 +48,13 @@ const ResultPage = () => {
     </div>
   );
 };
+
+const ResultPage = () => {
+  return (
+    <Suspense fallback={<div>読み込み中...</div>}>
+      <ResultContent />
+    </Suspense>
+  );
+};
+
 export default ResultPage;
