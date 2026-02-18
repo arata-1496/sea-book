@@ -1,6 +1,7 @@
 "use client";
 import useAnimalAll from "@/hooks/useAnimalAll";
 import { useState } from "react";
+import useCorrectAnimals from "@/hooks/useCorrectAnimals";
 import {
   Dialog,
   DialogContent,
@@ -21,6 +22,8 @@ export default function bookPage() {
     setIsAnimal(animal);
     setIsDialogOpen(true);
   };
+  const { correctAnimals } = useCorrectAnimals();
+  console.log("correctAnimals:", correctAnimals);
 
   if (loading) {
     return <div>読み込み中...</div>;
@@ -59,7 +62,7 @@ export default function bookPage() {
           </div>
         </DialogContent>
       </Dialog>
-      <Footer back="" />
+      <Footer back="start" />
     </div>
   );
 }

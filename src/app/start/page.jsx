@@ -4,11 +4,11 @@ import useAnimalId from "@/hooks/useAnimalId";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import useUserStore from "@/store/userStore";
 
 export default function StartPage() {
   const router = useRouter();
   const { animals, loading, error } = useAnimalId();
-  // const setGuestUser = useUserStore((state) => state.setGuestUser); // ← 追加
 
   const handleDecideAnimal = () => {
     const randomNum = Math.floor(Math.random() * animals.length);
@@ -16,6 +16,9 @@ export default function StartPage() {
     const query = `/quiz/?id=${animalNum}`;
     router.push(query);
   };
+
+  const userId = useUserStore((state) => state.userId);
+  console.log(userId);
 
   if (loading) {
     return <div>読み込み中...</div>;
