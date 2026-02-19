@@ -137,6 +137,8 @@ export default function UserPage() {
                 <label for="name">ばんごう:</label>
                 <input
                   type="number"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   placeholder="4つのすうじ"
                   className="bg-white rounded border-black"
                   value={userId}

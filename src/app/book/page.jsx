@@ -44,34 +44,21 @@ export default function bookPage() {
               (item) => item.animal_id === animal.animal_id,
             );
             console.log("isCorrect", isCorrect);
-            if (isCorrect) {
-              return (
-                <div
-                  key={animal.animal_id}
-                  className="w-28 h-28 border-4 border-black  bg-yellow rounded-3xl flex justify-center items-center overflow-hidden p-2 "
-                  onClick={() => handleAnimalDetail(animal)}
-                >
-                  <img
-                    src={animal.image}
-                    alt={animal.name}
-                    className="object-contain object-center max-w-24 max-h-24"
-                  />
-                </div>
-              );
-            } else {
-              return (
-                <div
-                  key={animal.animal_id}
-                  className="w-28 h-28 border-4 border-black  bg-yellow rounded-3xl flex justify-center items-center overflow-hidden p-2 "
-                >
-                  <img
-                    src="/hatena.png"
-                    alt="hatena"
-                    className="object-contain object-center max-w-24 max-h-24"
-                  />
-                </div>
-              );
-            }
+            return (
+              <div
+                key={animal.animal_id}
+                className="w-28 h-28 border-4 border-black  bg-yellow rounded-3xl flex justify-center items-center overflow-hidden p-2 "
+                onClick={
+                  isCorrect ? () => handleAnimalDetail(animal) : undefined
+                }
+              >
+                <img
+                  src={isCorrect ? animal.image : "/hatena.png"}
+                  alt={isCorrect ? animal.name : "hatena"}
+                  className="object-contain object-center max-w-24 max-h-24"
+                />
+              </div>
+            );
           })}
         </div>
       </div>
