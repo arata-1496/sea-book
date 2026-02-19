@@ -23,7 +23,7 @@ export default function BookPage() {
     setIsDialogOpen(true);
   };
   const { correctAnimals } = useCorrectAnimals();
-  console.log("correctAnimals:", correctAnimals);
+  // console.log("correctAnimals:", correctAnimals);
 
   if (loading) {
     return <div>読み込み中...</div>;
@@ -38,17 +38,29 @@ export default function BookPage() {
             const isCorrect = correctAnimals.some(
               (item) => item.animal_id === animal.animal_id,
             );
-            console.log("isCorrect", isCorrect);
+            const isCorrectR =
+              correctAnimals.filter(
+                (item) => item.animal_id === animal.animal_id,
+              ).length >= 10;
+            // console.log("ID:", animal.animal_id, "normal", isCorrect);
+            // console.log("ID:", animal.animal_id, "R", isCorrectR);
+            // console.log(animal.image_R);
             return (
               <div
                 key={animal.animal_id}
-                className="w-28 h-28 border-4 border-black  bg-yellow rounded-3xl flex justify-center items-center overflow-hidden p-2 "
+                className={`w-28 h-28 border-4 border-black  ${isCorrectR && animal.image_R !== null ? "bg-green-200" : "bg-yellow"} rounded-3xl flex justify-center items-center overflow-hidden p-2`}
                 onClick={
                   isCorrect ? () => handleAnimalDetail(animal) : undefined
                 }
               >
                 <img
-                  src={isCorrect ? animal.image : "/hatena.png"}
+                  src={
+                    isCorrectR && animal.image_R !== null
+                      ? animal.image_R
+                      : isCorrect
+                        ? animal.image
+                        : "/hatena.png"
+                  }
                   alt={isCorrect ? animal.name : "hatena"}
                   className="object-contain object-center max-w-24 max-h-24"
                 />
@@ -62,10 +74,27 @@ export default function BookPage() {
           <DialogHeader>
             <DialogTitle>{isAnimal.name}</DialogTitle>
             <DialogDescription>
-              <img src={isAnimal.image} />
+              <img
+                src={
+                  correctAnimals.filter(
+                    (item) => item.animal_id === isAnimal.animal_id,
+                  ).length >= 10 && isAnimal.image_R !== null
+                    ? isAnimal.image_R
+                    : isAnimal.image
+                }
+              />
             </DialogDescription>
           </DialogHeader>
           <div className="no-scrollbar -mx-4 max-h-[50vh] overflow-y-auto px-4">
+            <h1>
+              回答数：
+              {
+                correctAnimals.filter(
+                  (item) => item.animal_id === isAnimal.animal_id,
+                ).length
+              }
+              回
+            </h1>
             <h1>{isAnimal.comment}</h1>
           </div>
         </DialogContent>

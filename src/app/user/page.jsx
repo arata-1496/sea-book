@@ -16,6 +16,7 @@ import {
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { Footer } from "@/components/Footer";
+import Link from "next/link";
 
 export default function UserPage() {
   //router
@@ -31,11 +32,17 @@ export default function UserPage() {
   const [userId, setUserId] = useState("");
   //shadcn用
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
   //読み込んだら。。。
   useEffect(() => {
     setShowRegistererForm(registeredUsers.length === 0);
   }, [registeredUsers]);
+
+  //入力が正しければボタン押せるようになる
+  const isButtonDisabled = () => {
+    const isNumberValid = /^\d{4}$/.test(userId);
+    const isTextValid = name.trim() !== "";
+    return !(isNumberValid && isTextValid);
+  }; //ーーーーーーーーーーーーーーーーーー
 
   //ーー確認ボタンを押したら。。。ーー
   const handleConfirm = async () => {
@@ -43,7 +50,7 @@ export default function UserPage() {
     const { data: existingUsers } = await supabase
       .from("users")
       .select("user_id");
-    // console.log(existingUsers);
+
     //既存データと登録idを参照
     const isDuplicate = existingUsers.some(
       (user) => user.user_id === Number(userId),
@@ -56,14 +63,6 @@ export default function UserPage() {
     }
     //モーダルを表示
     setIsDialogOpen(true);
-  };
-  //ーーーーーーーーーーーーーーーーーー
-
-  //入力が正しければボタン押せるようになる
-  const isButtonDisabled = () => {
-    const isNumberValid = /^\d{4}$/.test(userId);
-    const isTextValid = name.trim() !== "";
-    return !(isNumberValid && isTextValid);
   }; //ーーーーーーーーーーーーーーーーーー
 
   //登録ボタンを押したら。。。
@@ -174,6 +173,9 @@ export default function UserPage() {
             </Button>
             <h1>OR</h1>
             <Button onClick={handleGuestStart}>ゲストとしてはじめる</Button>
+            <Button asChild>
+              <Link href="/user/return">さいログインはこちら</Link>
+            </Button>
           </div>
         )}
       </div>
