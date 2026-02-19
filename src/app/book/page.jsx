@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Footer } from "@/components/Footer";
 
-export default function bookPage() {
+export default function BookPage() {
   //shadcn用
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isAnimal, setIsAnimal] = useState({});
@@ -24,11 +24,6 @@ export default function bookPage() {
   };
   const { correctAnimals } = useCorrectAnimals();
   console.log("correctAnimals:", correctAnimals);
-
-  const checkList = correctAnimals.some(
-    (item) => item.animal_id === animals.animal_id,
-  );
-  console.log("checkList", checkList);
 
   if (loading) {
     return <div>読み込み中...</div>;

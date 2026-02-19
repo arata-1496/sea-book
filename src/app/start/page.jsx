@@ -24,12 +24,6 @@ export default function StartPage() {
     return <div>読み込み中...</div>;
   }
 
-  //console　現在のユーザー確認用
-  const data = JSON.parse(localStorage.getItem("user-storage"));
-  console.log("現在のユーザー", data.state.userId);
-  console.log("現在のユーザー", data.state.userName);
-  localStorage.setItem("user-storage", JSON.stringify(data));
-
   return (
     <div className="flex flex-col h-full pt-20">
       <h1 className="text-4xl font-black text-black text-center  ">

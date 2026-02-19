@@ -125,7 +125,7 @@ export default function UserPage() {
                 とちゅうからやり直せるよ！
               </h1>
               <div className="flex gap-2">
-                <label for="name">なまえ:</label>
+                <label htmlFor="name">なまえ:</label>
                 <input
                   type="text"
                   className="bg-white rounded border-black"

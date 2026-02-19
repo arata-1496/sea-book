@@ -68,7 +68,7 @@ export const SetValue = ({ animal, id }) => {
               onClick={handleClickResult}
               className="border-4 border-black rounded-2xl bg-orange text-center h-10 w-28 mx-1"
             >
-              <Link href={""}>けってい</Link>
+              けってい
             </button>
           </div>
         ) : (
