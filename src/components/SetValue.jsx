@@ -7,19 +7,27 @@ import useUserStore from "@/store/userStore";
 import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
 import { Button } from "./ui/button";
 import { Mic, SquareStop } from "lucide-react";
+import { toast } from "sonner";
 
 export const SetValue = ({ animal, id }) => {
   const [inputValue, setInputValue] = useState("");
   const [output, setOutput] = useState("");
   const userId = useUserStore((state) => state.userId);
   const router = useRouter();
-  const { isListening, transcript, handleMicClick } = useSpeechRecognition();
+  const { isListening, transcript, handleMicClick, hasKanji } =
+    useSpeechRecognition();
 
   useEffect(() => {
+    if (hasKanji) {
+      toast.warning("もういちどはなしてね", {
+        duration: 1500,
+      });
+      return;
+    }
     if (transcript !== "") {
       setOutput(transcript);
     }
-  }, [transcript]);
+  }, [transcript, hasKanji]);
 
   // 入力欄の作成
   const handleClick = () => {

@@ -2,9 +2,11 @@
 
 import { useState,useRef } from "react";
 
+
 export const useSpeechRecognition = () => {
   const [isListening, setIsListening] = useState(false)
   const [transcript, setTranscript] = useState("")
+  const [hasKanji, setHasKanji] = useState(false)
   const timerId = useRef(null)
 
 //ーーーweb speech API設定（デフォルト）ーーーーー
@@ -20,10 +22,13 @@ export const useSpeechRecognition = () => {
   //結果を受け取る
   recognition.onresult = (event)=>{
     const text = event.results[0][0].transcript;
-    console.log(text)
     setTranscript(text)
     setIsListening(false)
     clearTimeout(timerId.current)
+    const Kanji = /[^\u3040-\u30FF]/.test(text);
+    if(Kanji){
+      setHasKanji(true)
+    }
   };
   //エラー時
   recognition.onerror = () => {
@@ -41,6 +46,6 @@ export const useSpeechRecognition = () => {
     },3000)
   }
 
-  return { isListening,transcript, handleMicClick};
+  return { isListening,transcript, handleMicClick, hasKanji};
 }
 
