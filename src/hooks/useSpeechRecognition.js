@@ -1,10 +1,11 @@
 "use client"
 
-import { useState } from "react";
+import { useState,useRef } from "react";
 
 export const useSpeechRecognition = () => {
   const [isListening, setIsListening] = useState(false)
   const [transcript, setTranscript] = useState("")
+  const timerId = useRef(null)
 
 //ーーーweb speech API設定（デフォルト）ーーーーー
   //初期化
@@ -22,6 +23,7 @@ export const useSpeechRecognition = () => {
     console.log(text)
     setTranscript(text)
     setIsListening(false)
+    clearTimeout(timerId.current)
   };
   //エラー時
   recognition.onerror = () => {
@@ -32,6 +34,11 @@ export const useSpeechRecognition = () => {
     setIsListening(true)
     //音声認識開始
     recognition.start();
+    //タイマースタート
+    timerId.current = setTimeout(()=>{
+      recognition.stop()
+      setIsListening(false)
+    },3000)
   }
 
   return { isListening,transcript, handleMicClick};
