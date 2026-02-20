@@ -11,10 +11,30 @@ export const useSpeechRecognition = () => {
   const [transcript, setTranscript] = useState("")
   const timerId = useRef(null)
   const kuroshiroRef = useRef(null)
+  const recognitionRef = useRef(null)
 
   useEffect(()=>{
+    //ーーーweb speech API設定（デフォルト）ーーーーー
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognitionRef.current = new SpeechRecognition();
+    recognitionRef.current.lang = 'ja-JP';
+    recognitionRef.current.interimResults = true;
+    recognitionRef.current.continuous = true;
+    //結果を受け取る
+    recognitionRef.current.onresult =async(event)=>{
+      const text = event.results[0][0].transcript;
+      const result = await kuroshiroRef.current.convert(text, { to: "hiragana" });
+      setTranscript(result)
+      setIsListening(false)
+      clearTimeout(timerId.current)
+    };
+    //エラー時
+    recognitionRef.current.onerror = (event) => {
+      console.log("エラー:", event.error)
+      setIsListening(false)
+    }
+    // Kuroshiro用初期化[設定]（一度だけ）
     const init = async()=>{
-      // 初期化（一度だけ）
       const kuroshiro = new Kuroshiro();
       await kuroshiro.init(new KuromojiAnalyzer({ dictPath: "/dict" }));
       kuroshiroRef.current = kuroshiro
@@ -22,6 +42,7 @@ export const useSpeechRecognition = () => {
     init()
   },[])
 
+//ーーーひらがな変換ーーーーーーーーーーーー
   const convertToHiragana = async (text) => {
     if (!kuroshiroRef.current) return text;
     const converted = await kuroshiroRef.current.convert(text, { to: "hiragana" });
@@ -31,38 +52,24 @@ export const useSpeechRecognition = () => {
       );
     };
     return katakanaToHiragana(converted);
-  };
+  };//ーーーーーーーーーーーーーーーーーーー
 
-//ーーーweb speech API設定（デフォルト）ーーーーー
-  //初期化
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const recognition = new SpeechRecognition();
-  //言語設定を日本語に
-  recognition.lang = 'ja-JP';
-  //解析中の結果を表示する
-  recognition.interimResults = true;
-  //認識のたびに継続的に結果を返す
-  recognition.continuous = true;
-  //結果を受け取る
-  recognition.onresult =async(event)=>{
-    const text = event.results[0][0].transcript;
-    const result = await kuroshiroRef.current.convert(text, { to: "hiragana" });
-    setTranscript(result)
-    setIsListening(false)
-    clearTimeout(timerId.current)
-  };
-  //エラー時
-  recognition.onerror = () => {
-    setIsListening(false)
-  }
+
 
   const handleMicClick= () =>{
+    console.log("isListening:", isListening)
+    if (isListening){
+      clearTimeout(timerId.current)
+      recognitionRef.current.stop()
+      setIsListening(false)
+      return;
+    }
     setIsListening(true)
     //音声認識開始
-    recognition.start();
+    recognitionRef.current.start();
     //タイマースタート
     timerId.current = setTimeout(()=>{
-      recognition.stop()
+      recognitionRef.current.stop()
       setIsListening(false)
     },3000)
   }
