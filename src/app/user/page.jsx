@@ -117,7 +117,7 @@ export default function UserPage() {
         {showRegistererForm ? (
           <div className="">
             <div className="">
-              <h1>ユーザー登録</h1>
+              <h1>だれがあそぶ？</h1>
               <h1>
                 なまえとばんごうをとうろくしておけば、
                 <br />
@@ -157,25 +157,36 @@ export default function UserPage() {
           </div>
         ) : (
           <div>
-            <h1>ユーザー選択</h1>
-            <div>
+            <h1 className="text-5xl font-bold text-white">だれがあそぶ？</h1>
+            <div className="">
               {registeredUsers.map((data) => (
                 <Button
                   onClick={() => handleUserStart(data.userId, data.userName)}
                   key={data.userId}
+                  className="bg-orange font-black text-2xl border-4 border-black"
                 >
                   {data.userName}
                 </Button>
               ))}
             </div>
-            <Button onClick={() => setShowRegistererForm(true)}>
-              新しく登録
+            <Button
+              className="bg-sky-300 font-bold  border-4 border-black"
+              onClick={() => setShowRegistererForm(true)}
+            >
+              あたらしくとうろく
             </Button>
-            <h1>OR</h1>
-            <Button onClick={handleGuestStart}>ゲストとしてはじめる</Button>
-            <Button asChild>
-              <Link href="/user/return">さいログインはこちら</Link>
+
+            <Button
+              className="bg-sky-300 font-bold  border-4 border-black"
+              onClick={handleGuestStart}
+            >
+              ゲストとしてはじめる
             </Button>
+            <div>
+              <Link className=" font-bold text-white" href="/user/return">
+                再ログイン
+              </Link>
+            </div>
           </div>
         )}
       </div>
