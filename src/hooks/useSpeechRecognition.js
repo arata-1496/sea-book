@@ -1,13 +1,27 @@
 "use client"
 
-import { useState,useRef } from "react";
+import { useState,useRef, useEffect } from "react";
+import Kuroshiro from "kuroshiro";
+import KuromojiAnalyzer from "kuroshiro-analyzer-kuromoji";
+
 
 
 export const useSpeechRecognition = () => {
   const [isListening, setIsListening] = useState(false)
   const [transcript, setTranscript] = useState("")
-  const [hasKanji, setHasKanji] = useState(false)
+  // const [hasKanji, setHasKanji] = useState(false)
   const timerId = useRef(null)
+  const kuroshiroRef = useRef(null)
+
+  useEffect(()=>{
+    const init = async()=>{
+      // 初期化（一度だけ）
+      const kuroshiro = new Kuroshiro();
+      await kuroshiro.init(new KuromojiAnalyzer({ dictPath: "/dict" }));
+      kuroshiroRef.current = kuroshiro
+    }
+    init()
+  },[])
 
 //ーーーweb speech API設定（デフォルト）ーーーーー
   //初期化
@@ -20,15 +34,16 @@ export const useSpeechRecognition = () => {
   //認識のたびに継続的に結果を返す
   recognition.continuous = true;
   //結果を受け取る
-  recognition.onresult = (event)=>{
+  recognition.onresult =async(event)=>{
     const text = event.results[0][0].transcript;
-    setTranscript(text)
+    const result = await kuroshiroRef.current.convert(text, { to: "hiragana" });
+    setTranscript(result)
     setIsListening(false)
     clearTimeout(timerId.current)
-    const Kanji = /[^\u3040-\u30FF]/.test(text);
-    if(Kanji){
-      setHasKanji(true)
-    }
+    // const Kanji = /[^\u3040-\u30FF]/.test(text);
+    // if(Kanji){
+    //   setHasKanji(true)
+    // }
   };
   //エラー時
   recognition.onerror = () => {
@@ -46,6 +61,6 @@ export const useSpeechRecognition = () => {
     },3000)
   }
 
-  return { isListening,transcript, handleMicClick, hasKanji};
+  return { isListening,transcript, handleMicClick, };
 }
 
