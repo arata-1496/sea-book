@@ -1,16 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import useUserStore from "@/store/userStore";
-import Link from "next/link";
+import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
+import { Button } from "./ui/button";
+import { Mic, SquareStop } from "lucide-react";
 
 export const SetValue = ({ animal, id }) => {
   const [inputValue, setInputValue] = useState("");
   const [output, setOutput] = useState("");
   const userId = useUserStore((state) => state.userId);
   const router = useRouter();
+  const { isListening, transcript, handleMicClick } = useSpeechRecognition();
+
+  useEffect(() => {
+    if (transcript !== "") {
+      setOutput(transcript);
+    }
+  }, [transcript]);
 
   // 入力欄の作成
   const handleClick = () => {
@@ -73,6 +82,9 @@ export const SetValue = ({ animal, id }) => {
           </div>
         ) : (
           <div>
+            <Button onClick={handleMicClick}>
+              {isListening ? <SquareStop /> : <Mic />}
+            </Button>
             <input
               type="text"
               className="border-2 border-black bg-orange mr-2 rounded p-2 w-48 mb-4 text-black"

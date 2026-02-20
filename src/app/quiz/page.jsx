@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense } from "react"; // ← 追加
+import { Suspense } from "react";
 import { SetValue } from "@/components/SetValue";
 import { Footer } from "@/components/Footer";
 import useAnimal from "@/hooks/useAnimal";
