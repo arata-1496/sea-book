@@ -14,22 +14,14 @@ export const SetValue = ({ animal, id }) => {
   const [output, setOutput] = useState("");
   const userId = useUserStore((state) => state.userId);
   const router = useRouter();
-  const { isListening, transcript, handleMicClick } = useSpeechRecognition();
+  const { isListening, transcript, handleMicClick, convertToHiragana } =
+    useSpeechRecognition();
 
   useEffect(() => {
-    // if (hasKanji) {
-    //   toast.warning("もういちどやりなおしてね", {
-    //     duration: 1500,
-    //   });
-    //   return;
-    // }
     if (transcript !== "") {
       setOutput(transcript);
     }
-  }, [
-    transcript,
-    // hasKanji
-  ]);
+  }, [transcript]);
 
   // 入力欄の作成
   const handleClick = () => {
@@ -42,7 +34,8 @@ export const SetValue = ({ animal, id }) => {
   };
 
   const handleClickResult = async () => {
-    const isCorrect = animal.name === output;
+    const hiraganaOutput = await convertToHiragana(output);
+    const isCorrect = animal.name === output || animal.name === hiraganaOutput;
 
     const { error } = await supabase.from("animal_answers").insert({
       user_id: userId,

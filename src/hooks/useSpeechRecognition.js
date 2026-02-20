@@ -9,7 +9,6 @@ import KuromojiAnalyzer from "kuroshiro-analyzer-kuromoji";
 export const useSpeechRecognition = () => {
   const [isListening, setIsListening] = useState(false)
   const [transcript, setTranscript] = useState("")
-  // const [hasKanji, setHasKanji] = useState(false)
   const timerId = useRef(null)
   const kuroshiroRef = useRef(null)
 
@@ -22,6 +21,17 @@ export const useSpeechRecognition = () => {
     }
     init()
   },[])
+
+  const convertToHiragana = async (text) => {
+    if (!kuroshiroRef.current) return text;
+    const converted = await kuroshiroRef.current.convert(text, { to: "hiragana" });
+    const katakanaToHiragana = (str) => {
+      return str.replace(/[\u30A1-\u30F6]/g, (ch) =>
+        String.fromCharCode(ch.charCodeAt(0) - 0x60)
+      );
+    };
+    return katakanaToHiragana(converted);
+  };
 
 //ーーーweb speech API設定（デフォルト）ーーーーー
   //初期化
@@ -40,10 +50,6 @@ export const useSpeechRecognition = () => {
     setTranscript(result)
     setIsListening(false)
     clearTimeout(timerId.current)
-    // const Kanji = /[^\u3040-\u30FF]/.test(text);
-    // if(Kanji){
-    //   setHasKanji(true)
-    // }
   };
   //エラー時
   recognition.onerror = () => {
@@ -61,6 +67,6 @@ export const useSpeechRecognition = () => {
     },3000)
   }
 
-  return { isListening,transcript, handleMicClick, };
+  return { isListening,transcript, handleMicClick, convertToHiragana };
 }
 
