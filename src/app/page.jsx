@@ -2,32 +2,51 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div>
-      <h1>Hello World!</h1>
-      <h1 className="font-black text-[40px] text-yellow outline-solid outline-1">
-        こんにちは
-      </h1>
-      <button>
-        <Link href="/user">はじめる（ユーザーとうろく）</Link>
-      </button>
+    <div className="flex flex-col h-full bg-blue">
+      <div
+        className="flex-1 relative rounded-3xl mx-3 my-3 border-4 border-black overflow-hidden"
+        style={{
+          backgroundImage: "url('/visual/bg-top.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+
+        {/* ── うみの 吹き出し ── */}
+        <div className="absolute top-[23%] left-[28%] z-10">
+          <div className="relative bg-amber-50 border-4 border-black rounded-2xl px-4 py-2">
+            <span className="text-black font-black text-xl sm:text-2xl">うみの</span>
+            <div
+              className="absolute -bottom-[18px] left-4 border-[10px] border-transparent"
+              style={{ borderTopColor: "black" }}
+            />
+            <div
+              className="absolute -bottom-[11px] left-[18px] border-[7px] border-transparent"
+              style={{ borderTopColor: "#fffbeb" }}
+            />
+          </div>
+        </div>
+
+        {/* ── いきものずかん タイトル ── */}
+        <div className="absolute top-[30%] left-1/2 -translate-x-1/2 z-10 w-full text-center px-4">
+          <h1
+            className="text-white font-black text-4xl sm:text-5xl leading-tight"
+            style={{ textShadow: "3px 3px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000" }}
+          >
+            いきものずかん
+          </h1>
+        </div>
+
+        {/* ── はじめる ボタン ── */}
+        <div className="absolute bottom-[5%] left-1/2 -translate-x-1/2 z-20">
+          <Link href="/user">
+            <button className="bg-orange-400 border-4 border-black rounded-full px-10 py-3 text-white font-black text-2xl sm:text-3xl shadow-[3px_3px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all whitespace-nowrap">
+              はじめる
+            </button>
+          </Link>
+        </div>
+
+      </div>
     </div>
   );
 }
-// /* いきものずかん */
-
-// position: absolute;
-// width: 280px;
-// height: 48px;
-// left: 33px;
-// top: 154px;
-
-// font-family: 'Noto Sans JP';
-// font-style: normal;
-// font-weight: 900;
-// font-size: 40px;
-// line-height: 48px;
-// /* ボックスの高さと同一 */
-
-// color: #F5F1DC;
-
-// border: 1px solid #010101;

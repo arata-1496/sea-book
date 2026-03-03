@@ -41,7 +41,7 @@ export const useSpeechRecognition = () => {
       kuroshiroRef.current = kuroshiro
     }
     init()
-    return(recognitionRef.current.stop(()=>))
+    return () => recognitionRef.current.stop()
   },[])
 
 //ーーーひらがな変換ーーーーーーーーーーーー
