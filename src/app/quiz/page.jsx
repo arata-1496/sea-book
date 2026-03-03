@@ -38,7 +38,7 @@ const QuizContent = () => {
 
         {/* 動物画像エリア */}
         <div className="flex-1 flex items-center justify-center">
-          <div className="bg-amber-50 rounded-3xl border-4 border-black p-4 shadow-[3px_3px_0px_rgba(0,0,0,1)] w-full max-w-xs sm:max-w-sm aspect-square flex items-center justify-center">
+          <div className="bg-amber-50 rounded-3xl border-4 border-black p-4 shadow-[3px_3px_0px_rgba(0,0,0,1)] w-full max-w-xs sm:max-w-sm h-64 sm:h-72 flex items-center justify-center">
             <img
               className="object-contain w-full h-full"
               src={animal.image}
