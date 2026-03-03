@@ -1,16 +1,70 @@
+"use client";
 import Link from "next/link";
+import { useRef } from "react";
 
 export default function Home() {
+  const bgRef = useRef(null);
+  const containerRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    const container = containerRef.current;
+    const bg = bgRef.current;
+    if (!container || !bg) return;
+
+    const { left, top, width, height } = container.getBoundingClientRect();
+    // マウスの位置を -0.5〜0.5 に正規化
+    const x = ((e.clientX - left) / width - 0.5) * 70;
+    const y = ((e.clientY - top) / height - 0.5) * 70;
+
+    bg.style.transform = `translate(${x}px, ${y}px) scale(1.25)`;
+  };
+
+  const handleMouseLeave = () => {
+    const bg = bgRef.current;
+    if (!bg) return;
+    bg.style.transform = `translate(0px, 0px) scale(1.25)`;
+  };
+
+  const handleTouchMove = (e) => {
+    const container = containerRef.current;
+    const bg = bgRef.current;
+    if (!container || !bg) return;
+
+    const touch = e.touches[0];
+    const { left, top, width, height } = container.getBoundingClientRect();
+    const x = ((touch.clientX - left) / width - 0.5) * 70;
+    const y = ((touch.clientY - top) / height - 0.5) * 70;
+
+    bg.style.transform = `translate(${x}px, ${y}px) scale(1.25)`;
+  };
+
+  const handleTouchEnd = () => {
+    const bg = bgRef.current;
+    if (!bg) return;
+    bg.style.transform = `translate(0px, 0px) scale(1.25)`;
+  };
+
   return (
     <div className="flex flex-col h-full bg-blue">
       <div
+        ref={containerRef}
         className="flex-1 relative rounded-3xl mx-3 my-3 border-4 border-black overflow-hidden"
-        style={{
-          backgroundImage: "url('/visual/bg-top.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
+        {/* 背景画像（少し大きめにしてズラす余白を確保） */}
+        <div
+          ref={bgRef}
+          className="absolute inset-0 transition-transform duration-150 ease-out"
+          style={{
+            backgroundImage: "url('/visual/bg-top.png')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            transform: "scale(1.25)",
+          }}
+        />
 
         {/* ── うみの 吹き出し ── */}
         <div className="absolute top-[23%] left-[28%] z-10">
