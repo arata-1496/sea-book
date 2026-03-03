@@ -1,18 +1,19 @@
 "use client";
 import Link from "next/link";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 
 export default function Home() {
   const bgRef = useRef(null);
   const containerRef = useRef(null);
+  const [gyroEnabled, setGyroEnabled] = useState(false);
 
+  // ── PC：マウス移動 ──
   const handleMouseMove = (e) => {
     const container = containerRef.current;
     const bg = bgRef.current;
     if (!container || !bg) return;
 
     const { left, top, width, height } = container.getBoundingClientRect();
-    // マウスの位置を -0.5〜0.5 に正規化
     const x = ((e.clientX - left) / width - 0.5) * 70;
     const y = ((e.clientY - top) / height - 0.5) * 70;
 
@@ -25,24 +26,46 @@ export default function Home() {
     bg.style.transform = `translate(0px, 0px) scale(1.25)`;
   };
 
-  const handleTouchMove = (e) => {
-    const container = containerRef.current;
-    const bg = bgRef.current;
-    if (!container || !bg) return;
+  // ── スマホ：画面タッチで初回ジャイロ許可リクエスト ──
+  const enableGyro = async () => {
+    if (gyroEnabled) return;
 
-    const touch = e.touches[0];
-    const { left, top, width, height } = container.getBoundingClientRect();
-    const x = ((touch.clientX - left) / width - 0.5) * 70;
-    const y = ((touch.clientY - top) / height - 0.5) * 70;
-
-    bg.style.transform = `translate(${x}px, ${y}px) scale(1.25)`;
+    if (
+      typeof DeviceOrientationEvent !== "undefined" &&
+      typeof DeviceOrientationEvent.requestPermission === "function"
+    ) {
+      // iOS 13+ は許可が必要
+      try {
+        const permission = await DeviceOrientationEvent.requestPermission();
+        if (permission === "granted") setGyroEnabled(true);
+      } catch (e) {
+        console.log("ジャイロ許可拒否:", e);
+      }
+    } else {
+      // Android はそのまま有効化
+      setGyroEnabled(true);
+    }
   };
 
-  const handleTouchEnd = () => {
-    const bg = bgRef.current;
-    if (!bg) return;
-    bg.style.transform = `translate(0px, 0px) scale(1.25)`;
-  };
+  // ── ジャイロが有効になったらイベントリスナーを登録 ──
+  useEffect(() => {
+    if (!gyroEnabled) return;
+
+    const handleOrientation = (e) => {
+      const bg = bgRef.current;
+      if (!bg) return;
+
+      // gamma: 左右の傾き（-90〜90）
+      // beta:  前後の傾き（-180〜180）、自然な持ち方は約45°なので補正
+      const x = (e.gamma / 90) * 70;
+      const y = ((e.beta - 45) / 90) * 70;
+
+      bg.style.transform = `translate(${x}px, ${y}px) scale(1.25)`;
+    };
+
+    window.addEventListener("deviceorientation", handleOrientation);
+    return () => window.removeEventListener("deviceorientation", handleOrientation);
+  }, [gyroEnabled]);
 
   return (
     <div className="flex flex-col h-full bg-blue">
@@ -51,10 +74,9 @@ export default function Home() {
         className="flex-1 relative rounded-3xl mx-3 my-3 border-4 border-black overflow-hidden"
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
+        onTouchStart={enableGyro}
       >
-        {/* 背景画像（少し大きめにしてズラす余白を確保） */}
+        {/* 背景画像 */}
         <div
           ref={bgRef}
           className="absolute inset-0 transition-transform duration-150 ease-out"
