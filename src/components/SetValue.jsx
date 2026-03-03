@@ -5,9 +5,7 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import useUserStore from "@/store/userStore";
 import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
-import { Button } from "./ui/button";
 import { Mic, SquareStop } from "lucide-react";
-// import { toast } from "sonner";
 
 export const SetValue = ({ animal, id }) => {
   const [inputValue, setInputValue] = useState("");
@@ -23,12 +21,12 @@ export const SetValue = ({ animal, id }) => {
     }
   }, [transcript]);
 
-  // 入力欄の作成
   const handleClick = () => {
     if (inputValue === null) return;
     setOutput(inputValue);
     setInputValue("");
   };
+
   const handleCancelClick = () => {
     setOutput("");
   };
@@ -45,7 +43,6 @@ export const SetValue = ({ animal, id }) => {
 
     if (error) {
       console.error("保存エラー:", error);
-      // エラーが出ても、結果ページには遷移する
     }
 
     const resultQuery = isCorrect
@@ -55,55 +52,74 @@ export const SetValue = ({ animal, id }) => {
   };
 
   return (
-    <div>
-      <div className="flex w-auto justify-center m-2">
-        <div className="border-4 border-black rounded-2xl bg-yellow text-center h-10 w-28">
+    <div className="flex flex-col gap-3">
+      {/* 回答表示エリア */}
+      <div className="flex justify-center">
+        <div className="bg-amber-50 border-4 border-black rounded-2xl px-6 py-2 min-w-36 text-center shadow-[2px_2px_0px_rgba(0,0,0,1)]">
           {output ? (
-            <div className="text-xl text-black font-black ">
-              {output && <h1>{output}</h1>}
-            </div>
+            <p className="text-xl text-black font-black">{output}</p>
           ) : (
-            <h1 className="text-blue-800 text-xl font-black">{inputValue}</h1>
+            <p className="text-xl text-gray-400 font-black">
+              {inputValue || "？？？"}
+            </p>
           )}
         </div>
       </div>
-      <div className="w-auto justify-center flex">
-        {output ? (
-          <div>
+
+      {/* 操作ボタンエリア */}
+      {output ? (
+        /* 回答後：やりなおす・けってい */
+        <div className="flex gap-3 justify-center">
+          <button
+            onClick={handleCancelClick}
+            className="flex-1 max-w-36 bg-teal-400 border-4 border-black rounded-full py-2.5 text-white font-black text-sm shadow-[3px_3px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all"
+          >
+            やりなおす
+          </button>
+          <button
+            onClick={handleClickResult}
+            className="flex-1 max-w-36 bg-orange-400 border-4 border-black rounded-full py-2.5 text-white font-black text-sm shadow-[3px_3px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all"
+          >
+            けってい
+          </button>
+        </div>
+      ) : (
+        /* 回答前：マイク・テキスト入力・きめた */
+        <div className="flex flex-col gap-3">
+          {/* マイクボタン */}
+          <div className="flex justify-center">
             <button
-              className="border-4 border-black rounded-2xl bg-skyblue text-center h-10 w-28 mx-1"
-              onClick={handleCancelClick}
+              onClick={handleMicClick}
+              className={`w-16 h-16 rounded-full border-4 border-black flex items-center justify-center shadow-[3px_3px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all ${
+                isListening ? "bg-red-400" : "bg-orange-400"
+              }`}
             >
-              やりなおす
-            </button>
-            <button
-              onClick={handleClickResult}
-              className="border-4 border-black rounded-2xl bg-orange text-center h-10 w-28 mx-1"
-            >
-              けってい
+              {isListening ? (
+                <SquareStop className="text-white w-7 h-7" />
+              ) : (
+                <Mic className="text-white w-7 h-7" />
+              )}
             </button>
           </div>
-        ) : (
-          <div>
-            <Button onClick={handleMicClick}>
-              {isListening ? <SquareStop /> : <Mic />}
-            </Button>
+
+          {/* テキスト入力＋きめた */}
+          <div className="flex gap-2 justify-center">
             <input
               type="text"
-              className="border-2 border-black bg-orange mr-2 rounded p-2 w-48 mb-4 text-black"
-              placeholder="(ひらがな)"
+              className="min-w-0 flex-1 max-w-48 bg-amber-50 border-4 border-black rounded-full px-4 py-2 text-black font-bold text-sm focus:outline-none focus:border-blue-400"
+              placeholder="ひらがなでいれてね"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
             />
             <button
-              className="bg-orange rounded-3xl w-28 px-2.5 border-4 border-black p-1.5 hover:bg-yellow font-black"
               onClick={handleClick}
+              className="bg-orange-400 border-4 border-black rounded-full px-4 py-2 text-white font-black text-sm shadow-[3px_3px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all"
             >
               きめた
             </button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
