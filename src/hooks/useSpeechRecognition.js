@@ -27,6 +27,7 @@ export const useSpeechRecognition = () => {
       setTranscript(result)
       setIsListening(false)
       clearTimeout(timerId.current)
+      recognitionRef.current.stop()
     };
     //エラー時
     recognitionRef.current.onerror = (event) => {
@@ -40,6 +41,7 @@ export const useSpeechRecognition = () => {
       kuroshiroRef.current = kuroshiro
     }
     init()
+    return(recognitionRef.current.stop(()=>))
   },[])
 
 //ーーーひらがな変換ーーーーーーーーーーーー
