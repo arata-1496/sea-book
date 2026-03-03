@@ -27,20 +27,19 @@ export default function Home() {
   };
 
   // ── スマホ：画面タッチで初回ジャイロ許可リクエスト ──
-  const enableGyro = async () => {
+  const enableGyro = () => {
     if (gyroEnabled) return;
 
     if (
       typeof DeviceOrientationEvent !== "undefined" &&
       typeof DeviceOrientationEvent.requestPermission === "function"
     ) {
-      // iOS 13+ は許可が必要
-      try {
-        const permission = await DeviceOrientationEvent.requestPermission();
-        if (permission === "granted") setGyroEnabled(true);
-      } catch (e) {
-        console.log("ジャイロ許可拒否:", e);
-      }
+      // iOS 13+ は .then() で書かないとユーザー操作のコンテキストが失われる
+      DeviceOrientationEvent.requestPermission()
+        .then((permission) => {
+          if (permission === "granted") setGyroEnabled(true);
+        })
+        .catch((e) => console.log("ジャイロ許可拒否:", e));
     } else {
       // Android はそのまま有効化
       setGyroEnabled(true);
@@ -87,6 +86,13 @@ export default function Home() {
             transform: "scale(1.25)",
           }}
         />
+
+        {/* ── ジャイロ有効インジケーター（デバッグ用） ── */}
+        {gyroEnabled && (
+          <div className="absolute top-3 left-3 z-20 bg-green-400 border-2 border-black rounded-full px-2 py-1">
+            <span className="text-xs font-black text-black">ジャイロON</span>
+          </div>
+        )}
 
         {/* ── うみの 吹き出し ── */}
         <div className="absolute top-[23%] left-[28%] z-10">
