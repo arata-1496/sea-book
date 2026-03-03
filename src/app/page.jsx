@@ -6,6 +6,20 @@ export default function Home() {
   const bgRef = useRef(null);
   const containerRef = useRef(null);
   const [gyroEnabled, setGyroEnabled] = useState(false);
+  // iOSかどうか（requestPermissionが存在するか）
+  const [isIOS, setIsIOS] = useState(false);
+
+  useEffect(() => {
+    if (
+      typeof DeviceOrientationEvent !== "undefined" &&
+      typeof DeviceOrientationEvent.requestPermission === "function"
+    ) {
+      setIsIOS(true);
+    } else if (typeof DeviceOrientationEvent !== "undefined") {
+      // Android：許可不要でそのまま有効化
+      setGyroEnabled(true);
+    }
+  }, []);
 
   // ── PC：マウス移動 ──
   const handleMouseMove = (e) => {
@@ -26,24 +40,13 @@ export default function Home() {
     bg.style.transform = `translate(0px, 0px) scale(1.25)`;
   };
 
-  // ── スマホ：画面タッチで初回ジャイロ許可リクエスト ──
-  const enableGyro = () => {
-    if (gyroEnabled) return;
-
-    if (
-      typeof DeviceOrientationEvent !== "undefined" &&
-      typeof DeviceOrientationEvent.requestPermission === "function"
-    ) {
-      // iOS 13+ は .then() で書かないとユーザー操作のコンテキストが失われる
-      DeviceOrientationEvent.requestPermission()
-        .then((permission) => {
-          if (permission === "granted") setGyroEnabled(true);
-        })
-        .catch((e) => console.log("ジャイロ許可拒否:", e));
-    } else {
-      // Android はそのまま有効化
-      setGyroEnabled(true);
-    }
+  // ── iOS：ボタンクリックで許可リクエスト ──
+  const handleGyroButton = () => {
+    DeviceOrientationEvent.requestPermission()
+      .then((permission) => {
+        if (permission === "granted") setGyroEnabled(true);
+      })
+      .catch((e) => console.log("ジャイロ許可拒否:", e));
   };
 
   // ── ジャイロが有効になったらイベントリスナーを登録 ──
@@ -53,12 +56,8 @@ export default function Home() {
     const handleOrientation = (e) => {
       const bg = bgRef.current;
       if (!bg) return;
-
-      // gamma: 左右の傾き（-90〜90）
-      // beta:  前後の傾き（-180〜180）、自然な持ち方は約45°なので補正
       const x = (e.gamma / 90) * 70;
       const y = ((e.beta - 45) / 90) * 70;
-
       bg.style.transform = `translate(${x}px, ${y}px) scale(1.25)`;
     };
 
@@ -73,7 +72,6 @@ export default function Home() {
         className="flex-1 relative rounded-3xl mx-3 my-3 border-4 border-black overflow-hidden"
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        onTouchStart={enableGyro}
       >
         {/* 背景画像 */}
         <div
@@ -87,11 +85,14 @@ export default function Home() {
           }}
         />
 
-        {/* ── ジャイロ有効インジケーター（デバッグ用） ── */}
-        {gyroEnabled && (
-          <div className="absolute top-3 left-3 z-20 bg-green-400 border-2 border-black rounded-full px-2 py-1">
-            <span className="text-xs font-black text-black">ジャイロON</span>
-          </div>
+        {/* ── iOS用：傾きONボタン（許可済みで非表示） ── */}
+        {isIOS && !gyroEnabled && (
+          <button
+            onClick={handleGyroButton}
+            className="absolute top-3 right-3 z-20 bg-white border-2 border-black rounded-full px-3 py-1 shadow-[2px_2px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-0.5 active:translate-y-0.5 transition-all"
+          >
+            <span className="text-xs font-black text-black">📱 傾きON</span>
+          </button>
         )}
 
         {/* ── うみの 吹き出し ── */}
