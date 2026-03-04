@@ -48,7 +48,7 @@ export default function BookPage() {
               const isCorrectR =
                 correctAnimals.filter(
                   (item) => item.animal_id === animal.animal_id,
-                ).length >= 10;
+                ).length >= 2;
 
               return (
                 <div
@@ -66,7 +66,7 @@ export default function BookPage() {
                         ? animal.image_R
                         : isCorrect
                           ? animal.image
-                          : "/hatena.png"
+                          : "/visual/hatena.png"
                     }
                     alt={isCorrect ? animal.name : "？"}
                     className="object-contain w-full h-full"
