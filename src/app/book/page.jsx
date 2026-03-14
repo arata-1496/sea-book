@@ -48,7 +48,7 @@ export default function BookPage() {
               const isCorrectR =
                 correctAnimals.filter(
                   (item) => item.animal_id === animal.animal_id,
-                ).length >= 2;
+                ).length >= 10;
 
               return (
                 <div
