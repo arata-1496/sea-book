@@ -48,7 +48,7 @@ export default function BookPage() {
               const isCorrectR =
                 correctAnimals.filter(
                   (item) => item.animal_id === animal.animal_id,
-                ).length >= 10;
+                ).length >= 2;
 
               return (
                 <div
@@ -92,7 +92,7 @@ export default function BookPage() {
                     src={
                       correctAnimals.filter(
                         (item) => item.animal_id === isAnimal.animal_id,
-                      ).length >= 10 && isAnimal.image_R !== null
+                      ).length >= 2 && isAnimal.image_R !== null
                         ? isAnimal.image_R
                         : isAnimal.image
                     }
