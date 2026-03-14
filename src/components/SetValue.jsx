@@ -106,7 +106,7 @@ export const SetValue = ({ animal, id }) => {
           <div className="flex gap-2 justify-center">
             <input
               type="text"
-              className="min-w-0 flex-1 max-w-48 bg-amber-50 border-4 border-black rounded-full px-4 py-2 text-black font-bold text-sm focus:outline-none focus:border-blue-400"
+              className="min-w-0 flex-1 max-w-48 bg-amber-50 border-4 border-black rounded-full px-4 py-2 text-black font-bold text-base focus:outline-none focus:border-blue-400"
               placeholder="ひらがなでいれてね"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
