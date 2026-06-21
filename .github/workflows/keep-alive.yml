@@ -12,9 +12,22 @@ jobs:
     steps:
       - name: Ping Supabase
         run: |
-          curl -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/animals?select=animal_id&limit=1" \
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            --connect-timeout 10 \
+            --max-time 30 \
+            -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/animals?select=animal_id&limit=1" \
             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
-            -H "Content-Type: application/json" \
-            -f \
-            && echo "Success: Supabase is alive"
+            -H "Content-Type: application/json")
+
+          echo "HTTP Status: $HTTP_STATUS"
+
+          if [ "$HTTP_STATUS" = "200" ]; then
+            echo "Success: Supabase is alive"
+          elif [ "$HTTP_STATUS" = "000" ]; then
+            echo "ERROR: Could not connect to Supabase (project may be paused). Manual resume required."
+            exit 1
+          else
+            echo "ERROR: Unexpected HTTP status $HTTP_STATUS"
+            exit 1
+          fi
